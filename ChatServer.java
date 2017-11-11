@@ -28,9 +28,17 @@ final class ChatServer {
             Thread t = new Thread(r);
             clients.add((ClientThread) r);
             t.start();
+
+            while (true) {
+                socket = serverSocket.accept();
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+
+
     }
 
     /*
