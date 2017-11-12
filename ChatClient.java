@@ -2,6 +2,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.util.Scanner;
 
 final class ChatClient {
     private ObjectInputStream sInput;
@@ -97,8 +98,22 @@ final class ChatClient {
         ChatClient client = new ChatClient("localhost", 1500, "CS 180 Student");
         client.start();
 
-        //Send an empty message to the server
-        client.sendMessage(new ChatMessage());
+        //Used to read user input from terminal (believe that's what's supposed to be happening here).
+        Scanner input = new Scanner(System.in);
+
+        //Reads user input and stores it in the variable message.
+        String message = input.next();
+
+        if (message.toUpperCase().equals("/LOGOUT")) {
+            client.sendMessage(new ChatMessage(message, 1));
+            //TODO: Close input and output streams, plus the socket.
+        }
+        else {
+            client.sendMessage(new ChatMessage(message, 0));
+        }
+
+        //SAMPLE CODE: Sends an empty message to the server
+        //client.sendMessage(new ChatMessage());
     }
 
 
