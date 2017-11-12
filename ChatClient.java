@@ -12,10 +12,27 @@ final class ChatClient {
     private final String username;
     private final int port;
 
+    //Provided constructor for all three parameters.
     private ChatClient(String server, int port, String username) {
         this.server = server;
         this.port = port;
         this.username = username;
+    }
+
+    //Written constructor for two parameters (port + username).
+    private ChatClient(int port, String username) {
+        this.port = port;
+        this.username = username;
+
+        this.server = "localhost"; //Default IP
+    }
+
+    //Written constructor for one parameter (username).
+    private ChatClient(String username) {
+        this.username = username;
+
+        this.server = "localhost"; //Default IP
+        this.port = 1500; //Default port
     }
 
     /*

@@ -11,9 +11,14 @@ final class ChatServer {
     private final List<ClientThread> clients = new ArrayList<>();
     private final int port;
 
-
+    //Provided constructor with one parameter (port)
     private ChatServer(int port) {
         this.port = port;
+    }
+
+    //Written constructor with no parameters.
+    private  ChatServer() {
+        this.port = 1500;
     }
 
     /*
