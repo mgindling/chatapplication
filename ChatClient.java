@@ -35,18 +35,24 @@ final class ChatClient {
         this.port = 1500; //Default port
     }
 
-    /*
-     * This starts the Chat Client
-     */
+    //Written constructor for no parameters.
+    private ChatClient() {
+        this.server = "localhost";
+        this.port = 1500;
+        this.username = "Anonymous";
+    }
+
+    //Starts the chat client.
     private boolean start() {
-        // Create a socket
+
+        //Create a socket
         try {
             socket = new Socket(server, port);
         } catch (IOException e) {
             e.printStackTrace();
         }
 
-        // Create your input and output streams
+        //Create your input and output streams
         try {
             sInput = new ObjectInputStream(socket.getInputStream());
             sOutput = new ObjectOutputStream(socket.getOutputStream());
@@ -54,12 +60,12 @@ final class ChatClient {
             e.printStackTrace();
         }
 
-        // This thread will listen from the server for incoming messages
+        //This thread will listen from the server for incoming messages
         Runnable r = new ListenFromServer();
         Thread t = new Thread(r);
         t.start();
 
-        // After starting, send the clients username to the server.
+        //After starting, send the clients username to the server.
         try {
             sOutput.writeObject(username);
         } catch (IOException e) {
@@ -69,10 +75,7 @@ final class ChatClient {
         return true;
     }
 
-
-    /*
-     * This method is used to send a ChatMessage Objects to the server
-     */
+    //This method is used to send a ChatMessage Objects to the server
     private void sendMessage(ChatMessage msg) {
         try {
             sOutput.writeObject(msg);
@@ -81,26 +84,20 @@ final class ChatClient {
         }
     }
 
-
-    /*
-     * To start the Client use one of the following command
-     * > java ChatClient
-     * > java ChatClient username
-     * > java ChatClient username portNumber
-     * > java ChatClient username portNumber serverAddress
-     *
-     * If the portNumber is not specified 1500 should be used
-     * If the serverAddress is not specified "localHost" should be used
-     * If the username is not specified "Anonymous" should be used
-     */
     public static void main(String[] args) {
-        // Get proper arguments and override defaults
+        /*
+        * Client can initialize with:
+        *   The server, port, and username.
+        *   The port and username.
+        *   Just the username.
+        *   No parameters.
+        */
 
-        // Create your client and start it
+        //Create your client and start it.
         ChatClient client = new ChatClient("localhost", 1500, "CS 180 Student");
         client.start();
 
-        // Send an empty message to the server
+        //Send an empty message to the server
         client.sendMessage(new ChatMessage());
     }
 
@@ -112,6 +109,8 @@ final class ChatClient {
      */
     private final class ListenFromServer implements Runnable {
         public void run() {
+
+            //Allows client to persist. No kill switch besides force shutdown.
             while (true) {
                 try {
                     String msg = (String) sInput.readObject();
@@ -120,6 +119,7 @@ final class ChatClient {
                     e.printStackTrace();
                 }
             }
+
         }
     }
 }

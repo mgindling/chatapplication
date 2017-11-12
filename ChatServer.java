@@ -21,10 +21,8 @@ final class ChatServer {
         this.port = 1500;
     }
 
-    /*
-     * This is what starts the ChatServer.
-     * Right now it just creates the socketServer and adds a new ClientThread to a list to be handled
-     */
+    //This is what starts the ChatServer.
+    //Right now it just creates the socketServer and adds a new ClientThread to a list to be handled
     private void start() {
         try {
             ServerSocket serverSocket = new ServerSocket(port);
@@ -34,6 +32,7 @@ final class ChatServer {
             clients.add((ClientThread) r);
             t.start();
 
+            //Keeps server up forever. No kill switch as of now (other than force shutdown).
             while (true) {
                 socket = serverSocket.accept();
             }
@@ -42,25 +41,16 @@ final class ChatServer {
             e.printStackTrace();
         }
 
-
-
     }
 
-    /*
-     *  > java ChatServer
-     *  > java ChatServer portNumber
-     *  If the port number is not specified 1500 is used
-     */
+    //Initializes port (set at 1500; port number can be removed and it will initialize the same) and goes to start().
     public static void main(String[] args) {
         ChatServer server = new ChatServer(1500);
         server.start();
     }
 
-
-    /*
-     * This is a private class inside of the ChatServer
-     * A new thread will be created to run this every time a new client connects.
-     */
+    //This is a private class inside of the ChatServer
+    //A new thread will be created to run this every time a new client connects.
     private final class ClientThread implements Runnable {
         Socket socket;
         ObjectInputStream sInput;
@@ -81,12 +71,13 @@ final class ChatServer {
             }
         }
 
-        /*
-         * This is what the client thread actually runs.
-         */
+
+
+        //This is what the client thread actually runs.
         @Override
         public void run() {
-            // Read the username sent to you by client
+
+            //Read the username sent to you by client
             try {
                 cm = (ChatMessage) sInput.readObject();
             } catch (IOException | ClassNotFoundException e) {
@@ -94,8 +85,7 @@ final class ChatServer {
             }
             System.out.println(username + ": Ping");
 
-
-            // Send message back to the client
+            //Send message back to the client
             try {
                 sOutput.writeObject("Pong");
             } catch (IOException e) {
