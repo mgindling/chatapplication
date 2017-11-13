@@ -106,7 +106,7 @@ final class ChatClient {
 
         if (message.toUpperCase().equals("/LOGOUT")) {
             client.sendMessage(new ChatMessage(message, 1));
-            //TODO: Close input and output streams, plus the socket.
+            //Input and output cannot be closed from static context; I believe that the if statement in run handles it now.
         }
         else {
             client.sendMessage(new ChatMessage(message, 0));
@@ -130,6 +130,14 @@ final class ChatClient {
                 try {
                     String msg = (String) sInput.readObject();
                     System.out.print(msg);
+
+                    //If the server sends a kill String (right now it's end), everything closes and the client ends.
+                    if (msg.equals("end")) {
+                        sOutput.close();
+                        sInput.close();
+                        socket.close();
+                        break;
+                    }
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
                 }
