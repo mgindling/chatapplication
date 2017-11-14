@@ -3,6 +3,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -78,8 +79,10 @@ final class ChatServer {
             //Tests if the socket is still open (I think).
             if (socket.isConnected()) {
                 try {
-                    Date time = new Date(); //Includes date. Don't think this is how it's supposed to be done.
-                    sOutput.writeObject(message + " " + time); //Writes message to the output stream which lets other clients see it.
+                    Date now = new Date(); //Makes a new date object. I feel like there's an easier way to do this.
+                    SimpleDateFormat date = new SimpleDateFormat("MM.dd.yyyy");
+                    SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss"); //Could be condensed.
+                    sOutput.writeObject(message + " @ " + date.format(now) + " at " + time.format(now)); //Writes message to the output stream which lets other clients see it.
                     return true;
                 } catch (IOException e) {
                     e.printStackTrace();

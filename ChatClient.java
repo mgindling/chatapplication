@@ -105,7 +105,7 @@ final class ChatClient {
         String message;
         do {
             //Reads user input and stores it in the variable message.
-            message = input.next();
+            message = input.nextLine();
 
             //Checks to see whether user input is a normal message or a logout one.
             if (message.toUpperCase().equals("/LOGOUT")) {
