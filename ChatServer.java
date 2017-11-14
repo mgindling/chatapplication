@@ -1,3 +1,5 @@
+import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -93,14 +95,29 @@ final class ChatServer {
             }
         }
 
-
-        //Broadcast method. Sends message to all clients. Needs to be concurrent.
+        //Broadcast method. Sends message to all clients. I think it's concurrent; any client can access it.
         public void Broadcast(String message) {
             for (int c = 0; c < clients.size(); c++) {
                 clients.get(c).writeMessage(message);
             }
         }
 
+        //Removes the client at the specified slot.
+        private void remove(int id) {
+            clients.remove(id);
+        }
+
+        //"Does the same thing as logging out in the client."
+        private void close() {
+            try {
+                socket.close();
+                sOutput.close();
+                sInput.close();
+                return;
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
         //This is what the client thread actually runs.
         @Override
@@ -123,7 +140,11 @@ final class ChatServer {
                 //If the message is a logout message the server sends a message to the client THAT CALLED IT telling it to close.
                 if (cm.getType() == 1) {
                     try {
+                        //Program should use the arraylist to search for the client with the same ID and then send that to the method to be deleted.
+                        //Not sure if that's what it's doing here.
+                        remove(clients.indexOf(id));
                         sOutput.writeObject("end");
+                        close();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
