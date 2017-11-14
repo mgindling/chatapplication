@@ -12,4 +12,12 @@ final class ChatMessage implements Serializable {
         this.type = type;
     }
 
+    public String getMsg() {
+        return msg;
+    }
+
+    public int getType() {
+        return type;
+    }
+
 }
