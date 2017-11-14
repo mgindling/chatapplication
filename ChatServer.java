@@ -113,7 +113,11 @@ final class ChatServer {
                 }
                 System.out.println(username + ": Ping");
 
-                //If the message is a logout message the server sends a message to the client telling it to close.
+                //Calls the broadcast method, which makes all clients receive the same message.
+                //Should NOT cause every client on the server to logoff in the case of a logout message.
+                Broadcast(cm.getMsg());
+
+                //If the message is a logout message the server sends a message to the client THAT CALLED IT telling it to close.
                 if (cm.getType() == 1) {
                     try {
                         sOutput.writeObject("end");
@@ -121,14 +125,15 @@ final class ChatServer {
                         e.printStackTrace();
                     }
                 }
-                else {
-                    //Send message back to client.
-                    try {
-                        sOutput.writeObject("Pong");
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
+                // SAMPLE CODE: Simply "Pongs" a message back to the client.
+                // else {
+                //    Send message back to client.
+                //    try {
+                //        sOutput.writeObject("Pong");
+                //    } catch (IOException e) {
+                //        e.printStackTrace();
+                //    }
+                //}
             }
         }
     }

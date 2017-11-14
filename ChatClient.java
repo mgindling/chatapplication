@@ -143,7 +143,7 @@ final class ChatClient {
                         return;
                     }
                     else {
-                        System.out.print(msg);
+                        System.out.println(msg);
                     }
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();
