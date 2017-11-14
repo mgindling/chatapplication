@@ -118,7 +118,7 @@ final class ChatServer {
 
                 //Calls the broadcast method, which makes all clients receive the same message.
                 //Should NOT cause every client on the server to logoff in the case of a logout message.
-                Broadcast(cm.getMsg());
+                Broadcast(username + ": " + cm.getMsg());
 
                 //If the message is a logout message the server sends a message to the client THAT CALLED IT telling it to close.
                 if (cm.getType() == 1) {
