@@ -101,17 +101,22 @@ final class ChatClient {
         //Used to read user input from terminal (believe that's what's supposed to be happening here).
         Scanner input = new Scanner(System.in);
 
-        //Reads user input and stores it in the variable message.
-        String message = input.next();
+        //Allows the client to send messages until "/LOGOUT" is entered.
+        String message;
+        do {
+            //Reads user input and stores it in the variable message.
+            message = input.next();
 
-        if (message.toUpperCase().equals("/LOGOUT")) {
-            client.sendMessage(new ChatMessage(message, 1));
-            //Input and output cannot be closed from static context; I believe that the if statement in run handles it now.
-        }
-        else {
-            client.sendMessage(new ChatMessage(message, 0));
-        }
+            //Checks to see whether user input is a normal message or a logout one.
+            if (message.toUpperCase().equals("/LOGOUT")) {
+                client.sendMessage(new ChatMessage(message, 1));
+                return;
+                //Input and output cannot be closed from static context; I believe that the if statement in run handles it now.
+            } else {
+                client.sendMessage(new ChatMessage(message, 0));
+            }
 
+        } while (!message.equals("/LOGOUT"));
         //SAMPLE CODE: Sends an empty message to the server
         //client.sendMessage(new ChatMessage());
     }
@@ -129,14 +134,16 @@ final class ChatClient {
             while (true) {
                 try {
                     String msg = (String) sInput.readObject();
-                    System.out.print(msg);
 
-                    //If the server sends a kill String (right now it's end), everything closes and the client ends.
+                    //If the server sends a kill String (right now it's end), everything closes and the client ends. (Client actually ends in main.)
                     if (msg.equals("end")) {
                         sOutput.close();
                         sInput.close();
                         socket.close();
-                        break;
+                        return;
+                    }
+                    else {
+                        System.out.print(msg);
                     }
                 } catch (IOException | ClassNotFoundException e) {
                     e.printStackTrace();

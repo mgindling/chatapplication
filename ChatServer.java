@@ -85,8 +85,7 @@ final class ChatServer {
                     e.printStackTrace();
                     return false;
                 }
-            }
-            else {
+            } else {
                 return false;
             }
         }
@@ -104,21 +103,33 @@ final class ChatServer {
         @Override
         public void run() {
 
-            //Read the username sent to you by client
-            try {
-                cm = (ChatMessage) sInput.readObject();
-            } catch (IOException | ClassNotFoundException e) {
-                e.printStackTrace();
-            }
-            System.out.println(username + ": Ping");
+            //Allows the server to respond to messages indefinitely.
+            while (true) {
+                //Read the username sent to you by client
+                try {
+                    cm = (ChatMessage) sInput.readObject();
+                } catch (IOException | ClassNotFoundException e) {
+                    e.printStackTrace();
+                }
+                System.out.println(username + ": Ping");
 
-            //Send message back to the client
-            try {
-                sOutput.writeObject("Pong");
-            } catch (IOException e) {
-                e.printStackTrace();
+                //If the message is a logout message the server sends a message to the client telling it to close.
+                if (cm.getType() == 1) {
+                    try {
+                        sOutput.writeObject("end");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    //Send message back to client.
+                    try {
+                        sOutput.writeObject("Pong");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         }
     }
 }
-
