@@ -107,13 +107,40 @@ final class ChatClient {
             //Reads user input and stores it in the variable message.
             message = input.nextLine();
 
+            //TODO: listing ("/list", see below TODO), other error checking (ex: "/msg " gives an error b/c the client will try to send a dm to someone with no username)
             //Checks to see whether user input is a normal message or a logout one.
             if (message.toUpperCase().equals("/LOGOUT")) {
-                client.sendMessage(new ChatMessage(message, 1));
+                client.sendMessage(new ChatMessage(message, 1, null));
                 return;
                 //Input and output cannot be closed from static context; I believe that the if statement in run handles it now.
-            } else {
-                client.sendMessage(new ChatMessage(message, 0));
+            } else if (message.toUpperCase().equals("/LIST")) {
+                    //TODO: print out list
+
+
+            } else if (message.length() > 4) { //avoiding exceptions (ex: sending the message "hi" should move on to the else statement)
+                if (message.substring(0, 4).toUpperCase().equals("/MSG")) {
+                    //remove "/msg " from message
+                    message = message.substring(5, message.length());
+
+                    //get username (recipient of dm)
+                    String username = "";
+                    int counter = 0;
+                    while (!Character.isWhitespace(message.charAt(counter))) {
+                        username += message.charAt(counter);
+                    }
+
+                    // Right now if they try to dm themselves, the person will "successfully" dm themselves but the message will be "you can't dm yourself".
+                    // I get the feeling Vocareum will see this as an error even though it would work fine for whoever is using the program.
+                    if (username.equals(client.username)) {
+                        client.sendMessage(new ChatMessage("You can't direct message yourself.", 2, username)); //would this line cause an error? I don't think so
+                    } else {
+                        message = message.substring(username.length(), message.length());
+                        client.sendMessage(new ChatMessage(message, 2, username));
+                    }
+                }
+            }
+            else {
+                client.sendMessage(new ChatMessage(message, 0, null));
             }
 
         } while (!message.equals("/LOGOUT"));
