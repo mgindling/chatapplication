@@ -100,12 +100,27 @@ final class ChatClient {
         ChatClient client = new ChatClient("localhost", 1500, "CS 180 Student");
         client.start();
 
+        //Instructions for the user (and us).
+        System.out.println("Welcome to the CS18000 chat application!");
+        System.out.println("To send a general message, simply type your message!");
+        System.out.println("To list the clients currently on the server, type '/list'");
+        System.out.println("To send a private message, type '/msg' and then (?????)");
+        System.out.println("To logout, type '/logout'");
+        System.out.println();
+
         //Used to read user input from terminal (believe that's what's supposed to be happening here).
         Scanner input = new Scanner(System.in);
 
         //Allows the client to send messages until "/LOGOUT" is entered.
         String message;
         do {
+
+            //Makes it look nice ("if it doesn't look nice, it doesn't work.")
+            //It doesn't work right now. The code input.hasNextLine() works opposite (i.e. only displays "Chat: " when the server outputs something. This does nothing (???). Just having it print out "Chat:" prints it out every line.
+            // if (!input.hasNextLine()) {
+            //     System.out.print("Chat: ");
+            // }
+
             //Reads user input and stores it in the variable message.
             message = input.nextLine();
 
