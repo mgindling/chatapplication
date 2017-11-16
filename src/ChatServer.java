@@ -84,7 +84,7 @@ final class ChatServer {
                 //Checks to see if the username is taken
                 for (int u = 0; u < clients.size(); u++) {
                     if (clients.get(u).username.equals(username)) {
-
+                        username = null;
                     }
                 }
 
@@ -157,6 +157,13 @@ final class ChatServer {
         @Override
         public void run() {
 
+            //"Killed before you began--and you say I'm the evil one?"
+            if (username == null) {
+                remove(id);
+                close();
+                return;
+            }
+
             //Allows the server to respond to messages indefinitely.
             while (true) {
                 //Read the username sent to you by client
@@ -175,7 +182,7 @@ final class ChatServer {
                     try {
                         //Program should use the arraylist to search for the client with the same ID and then send that to the method to be deleted.
                         //Not sure if that's what it's doing here.
-                        remove(clients.indexOf(id));
+                        remove(id);
                         sOutput.writeObject("end");
                         close();
                     } catch (IOException e) {
