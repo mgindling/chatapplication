@@ -57,6 +57,10 @@ final class ChatServer {
 
     }
 
+    public List<ClientThread> getClients() {
+        return clients;
+    }
+
     //Initializes port (set at 1500; port number can be removed and it will initialize the same) and goes to start().
     public static void main(String[] args) {
         ChatServer server = new ChatServer(1500);
@@ -153,6 +157,22 @@ final class ChatServer {
             }
         }
 
+        private void list(String username) {
+            ArrayList <ClientThread> list = new ArrayList<>();
+
+            for (int i = 0; i < clients.size(); i++) {
+                if (!clients.get(i).username.equals(username)) {
+                    list.add(clients.get(i));
+                }
+            }
+
+            if (list.size() == 0) {
+                writeMessage("Nobody else is online");
+            } else {
+                writeMessage(list.toString());
+            }
+        }
+
         //This is what the client thread actually runs.
         @Override
         public void run() {
@@ -176,7 +196,10 @@ final class ChatServer {
 
                 //Calls the broadcast method, which makes all clients receive the same message.
                 //Should NOT cause every client on the server to logoff in the case of a logout message.
-                broadcast(username + ": " + cm.getMsg());
+                if (cm.getType() == 0) {
+                    broadcast(username + ": " + cm.getMsg());
+                }
+
                 //If the message is a logout message the server sends a message to the client THAT CALLED IT telling it to close.
                 if (cm.getType() == 1) {
                     try {
@@ -194,6 +217,9 @@ final class ChatServer {
                     directMessage(cm.getMsg(), cm.getRecipient());
                 }
 
+                if (cm.getType() == 3) {
+                    list(username);
+                }
                 // SAMPLE CODE: Simply "Pongs" a message back to the client.
                 // else {
                 //    Send message back to client.
