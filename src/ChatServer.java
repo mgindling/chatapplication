@@ -80,6 +80,14 @@ final class ChatServer {
                 sOutput = new ObjectOutputStream(socket.getOutputStream());
                 sInput = new ObjectInputStream(socket.getInputStream());
                 username = (String) sInput.readObject();
+
+                //Checks to see if the username is taken
+                for (int u = 0; u < clients.size(); u++) {
+                    if (clients.get(u).username.equals(username)) {
+
+                    }
+                }
+
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
