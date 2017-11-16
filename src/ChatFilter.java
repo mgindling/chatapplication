@@ -25,13 +25,13 @@ public class ChatFilter {
             String filterer; //A string that holds the resulted of a filtering.
             while (s.hasNextLine()) {
                 filterer = "";
-                filterWord = s.nextLine(); //This shouldn't result in a null-pointer. It might cause an infinite loop, though.
+                filterWord = s.nextLine().toUpperCase();
 
-                if (msg.contains(filterWord)) { //If the message contains the searched-for word...
+                if (msg.toUpperCase().contains(filterWord)) { //If the message contains the searched-for word...
                     for (int i = 0; i < filterWord.length(); i++) { //The program loops for as long as the word, making a new string with only *s.
                         filterer += "*";
                     }
-                    msg = msg.replace(filterWord, filterer); //The bad word is then replaced with the asterisks.
+                    msg = msg.replaceAll("(?i)" + filterWord, filterer); //The bad word is then replaced with the asterisks.
                 }
             }
         } catch (IOException e) {
