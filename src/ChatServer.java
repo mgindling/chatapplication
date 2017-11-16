@@ -180,6 +180,13 @@ final class ChatServer {
             //"Killed before you began--and you say I'm the evil one?"
             if (username == null) {
                 remove(id);
+
+                try {
+                    sOutput.writeObject("end");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
                 close();
                 return;
             }

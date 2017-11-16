@@ -109,8 +109,6 @@ final class ChatClient {
             return;
         }
 
-        //Kill client before it tries to reconnect to the client.
-
         //Instructions for the user (and us).
         System.out.println("Welcome to the CS18000 chat application!");
         System.out.println("To send a general message, simply type your message!");
@@ -188,6 +186,20 @@ final class ChatClient {
      */
     private final class ListenFromServer implements Runnable {
         public void run() {
+
+            //Kill client before it tries to reconnect to the client if something's invalid about it.
+            try {
+                if (sInput.readObject().equals("end")) {
+                    sOutput.close();
+                    sInput.close();
+                    socket.close();
+                    return;
+                }
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             //Allows client to persist. No kill switch besides force shutdown.
             while (true) {
