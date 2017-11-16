@@ -169,7 +169,7 @@ final class ChatClient {
                             } else {
                                 //get message
                                 int counter2 = 1;
-                                message = message.substring(username.length() + 3, message.length() - 1);
+                                message = message.substring(username.length() + 3, message.length());
                                 if (!(message.substring(0, 1).equals("<") && message.contains(">"))) {
                                     client.sendMessage(new ChatMessage("Please specify the message between the second < and >", 2, client.username));
                                 } else {
@@ -178,7 +178,7 @@ final class ChatClient {
                                         counter2++;
                                     }
 
-                                    message = message.substring(1, counter2 + 2);
+                                    message = message.substring(1, message.length() - 1);
                                     client.sendMessage(new ChatMessage(message, 2, username));
                                 }
                             }

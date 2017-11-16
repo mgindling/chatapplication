@@ -57,10 +57,6 @@ final class ChatServer {
 
     }
 
-    public List<ClientThread> getClients() {
-        return clients;
-    }
-
     //Initializes port (set at 1500; port number can be removed and it will initialize the same) and goes to start().
     public static void main(String[] args) {
         ChatServer server = new ChatServer(1500);
@@ -117,6 +113,10 @@ final class ChatServer {
             } else {
                 return false;
             }
+        }
+
+        public List<ClientThread> getClients() {
+            return clients;
         }
 
         //Broadcast method. Sends message to all clients. I think it's concurrent; any client can access it.
@@ -213,8 +213,17 @@ final class ChatServer {
                     }
                 }
 
+                Boolean variable = false;
                 if (cm.getType() == 2) {
-                    directMessage(cm.getMsg(), cm.getRecipient());
+                    for (int i = 0; i < clients.size(); i++) {
+                        if (clients.get(i).username.equals(cm.getRecipient())) {
+                            directMessage(cm.getMsg(), cm.getRecipient());
+                            variable = true;
+                        }
+                    }
+                    if (!variable) {
+                        directMessage("That person is not online or does not exist.", username);
+                    }
                 }
 
                 if (cm.getType() == 3) {
