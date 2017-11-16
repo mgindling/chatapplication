@@ -95,7 +95,7 @@ final class ChatServer {
                     SimpleDateFormat date = new SimpleDateFormat("MM.dd.yyyy");
                     SimpleDateFormat time = new SimpleDateFormat("HH:mm:ss"); //Could be condensed.
                     ChatFilter cf = new ChatFilter("badwords.txt");
-                    cf.filter(message);
+                    message = cf.filter(message);
                     sOutput.writeObject(message + " @ " + date.format(now) + " at " + time.format(now)); //Writes message to the output stream which lets other clients see it.
                     return true;
                 } catch (IOException e) {

@@ -19,18 +19,19 @@ public class ChatFilter {
             Scanner s = new Scanner(fis);
 
             //FileReader fr = new FileReader(badWordsFileName);
-            //BufferedReader br = new BufferedReader(fr); //Needs to flush.
+            //BufferedReader br = new BufferedReader(fr); //Needs to flush + string wasn't being modified back at the server + I like scanner better ;).
 
-            String filterWord;
-            String filterer;
-            while ((filterWord = s.hasNextLine()) != null) {
+            String filterWord; //Current word that is being searched for
+            String filterer; //A string that holds the resulted of a filtering.
+            while (s.hasNextLine()) {
                 filterer = "";
+                filterWord = s.nextLine(); //This shouldn't result in a null-pointer. It might cause an infinite loop, though.
 
-                if (msg.contains(filterWord)) {
-                    for (int i = 0; i < filterWord.length(); i++) {
+                if (msg.contains(filterWord)) { //If the message contains the searched-for word...
+                    for (int i = 0; i < filterWord.length(); i++) { //The program loops for as long as the word, making a new string with only *s.
                         filterer += "*";
                     }
-                    msg = msg.replace(filterWord, filterer);
+                    msg = msg.replace(filterWord, filterer); //The bad word is then replaced with the asterisks.
                 }
             }
         } catch (IOException e) {
