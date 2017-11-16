@@ -213,7 +213,7 @@ final class ChatClient {
             //Allows client to persist. No kill switch besides force shutdown.
             while (true) {
                     try {
-                        String msg = "";
+                        String msg;
                         try {
                             msg = (String) sInput.readObject();
                         }catch (SocketException | ClassNotFoundException e) {
