@@ -101,7 +101,9 @@ final class ChatClient {
 
         //Create your client and start it.
         ChatClient client;
-        client = new ChatClient("localhost", 1500, "CS 180 Student");
+        ChatClient client2;
+        client = new ChatClient(args[2], Integer.parseInt(args[1]), args[0]);
+        client2 = new ChatClient();
 
         try {
             client.start();
