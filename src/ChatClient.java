@@ -143,27 +143,46 @@ final class ChatClient {
             } else if (message.toUpperCase().equals("/LIST")) { //Prints out list
                 //TODO: print out list
                 client.sendMessage(new ChatMessage("This will be replaced by the list", 3, client.username));
-            } else if (message.length() > 5 && message.substring(0, 4).toUpperCase().equals("/LIST") && !message.substring(5, message.length()).equals(" ")) {
+            } else if (message.length() > 5 && message.substring(0, 5).toUpperCase().equals("/LIST") && !message.substring(5, message.length()).equals(" ")) {
                 client.sendMessage(new ChatMessage("Please type exactly /list when asking for a list", 2, client.username));
             } else if (message.length() > 4) { //avoiding exceptions (ex: sending the message "hi" should move on to the else statement)
-                if (message.substring(0, 4).toUpperCase().equals("/MSG")) { //Sends direct message
+                if (message.substring(0, 5).toUpperCase().equals("/MSG ")) { //Sends direct message
                     //remove "/msg " from message
                     message = message.substring(5, message.length());
 
-                    //get username (recipient of dm)
-                    String username = "";
-                    int counter = 0;
-                    while (!Character.isWhitespace(message.charAt(counter))) {
-                        username += message.charAt(counter);
-                    }
-
-                    // Right now if they try to dm themselves, the person will "successfully" dm themselves but the message will be "you can't dm yourself".
-                    // I get the feeling Vocareum will see this as an error even though it would work fine for whoever is using the program.
-                    if (username.equals(client.username)) {
-                        client.sendMessage(new ChatMessage("You can't direct message yourself.", 2, client.username)); //would this line cause an error? I don't think so
+                    if (!(message.substring(0, 1).equals("<") && message.contains(">"))) {
+                        client.sendMessage(new ChatMessage("Please specify the username between < and >", 2, client.username));
                     } else {
-                        message = message.substring(username.length(), message.length());
-                        client.sendMessage(new ChatMessage(message, 2, username));
+
+                        //get username (recipient of dm)
+                        String username = "";
+                        int counter = 1;
+                        if (message.substring(0, 1).equals("<")) {
+                            while (!(message.charAt(counter) == '>')) {
+                                username += message.charAt(counter++);
+                            }
+
+                            // Right now if they try to dm themselves, the person will "successfully" dm themselves but the message will be "you can't dm yourself".
+                            // I get the feeling Vocareum will see this as an error even though it would work fine for whoever is using the program.
+                            if (username.equals(client.username)) {
+                                client.sendMessage(new ChatMessage("You can't direct message yourself.", 2, client.username)); //would this line cause an error? I don't think so
+                            } else {
+                                //get message
+                                int counter2 = 1;
+                                message = message.substring(username.length() + 3, message.length() - 1);
+                                if (!(message.substring(0, 1).equals("<") && message.contains(">"))) {
+                                    client.sendMessage(new ChatMessage("Please specify the message between the second < and >", 2, client.username));
+                                } else {
+                                    //gets length of message
+                                    while (!(message.charAt(counter2) == '>')) {
+                                        counter2++;
+                                    }
+
+                                    message = message.substring(1, counter2 + 2);
+                                    client.sendMessage(new ChatMessage(message, 2, username));
+                                }
+                            }
+                        }
                     }
                 }
                 else { //Sends a general message of more than 4 letters
