@@ -3,7 +3,9 @@ package src; //Probably should be removed at the end of programming.
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.net.ConnectException;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.Scanner;
 
 final class ChatClient {
@@ -97,8 +99,16 @@ final class ChatClient {
         */
 
         //Create your client and start it.
-        ChatClient client = new ChatClient("localhost", 1500, "CS 180 Student");
-        client.start();
+        ChatClient client;
+        client = new ChatClient("localhost", 1500, "CS 180 Student");
+
+        try {
+            client.start();
+        } catch (NullPointerException e) { //If the server is not available, the client just ends.
+            System.out.println("Server not available!");
+            return;
+        }
+
 
         //Instructions for the user (and us).
         System.out.println("Welcome to the CS18000 chat application!");
