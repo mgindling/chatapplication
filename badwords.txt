@@ -2,7 +2,7 @@ iu
 hoosier
 bloomington
 sleep
-null pointer exceptions
+null pointer exception
+array index out of bound exception
 potato
-potatoes
 frickin' fricks
