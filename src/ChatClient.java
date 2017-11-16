@@ -109,12 +109,13 @@ final class ChatClient {
             return;
         }
 
+        //Kill client before it tries to reconnect to the client.
 
         //Instructions for the user (and us).
         System.out.println("Welcome to the CS18000 chat application!");
         System.out.println("To send a general message, simply type your message!");
         System.out.println("To list the clients currently on the server, type '/list'");
-        System.out.println("To send a private message, type '/msg' and then (?????)");
+        System.out.println("To send a private message, type '/msg' and then <recipient> and then your message.");
         System.out.println("To logout, type '/logout'");
         System.out.println();
 
@@ -141,7 +142,7 @@ final class ChatClient {
                 return;
                 //Input and output cannot be closed from static context; I believe that the if statement in run handles it now.
             } else if (message.toUpperCase().equals("/LIST")) { //Prints out list
-                //TODO: print out list
+                //SHOULD print out list.
                 client.sendMessage(new ChatMessage("This will be replaced by the list", 3, client.username));
             } else if (message.length() > 5 && message.substring(0, 4).toUpperCase().equals("/LIST") && !message.substring(5, message.length()).equals(" ")) {
                 client.sendMessage(new ChatMessage("Please type exactly /list when asking for a list", 2, client.username));
