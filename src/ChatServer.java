@@ -178,6 +178,7 @@ final class ChatServer {
                 if (cm.getType() == 2) {
                     directMessage(cm.getMsg(), cm.getRecipient());
                 }
+
                 // SAMPLE CODE: Simply "Pongs" a message back to the client.
                 // else {
                 //    Send message back to client.
