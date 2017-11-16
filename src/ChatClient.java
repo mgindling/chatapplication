@@ -1,4 +1,4 @@
-package src;
+package src; //Probably should be removed at the end of programming.
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -111,16 +111,16 @@ final class ChatClient {
 
             //TODO: listing ("/list", see below TODO), other error checking (ex: "/msg " gives an error b/c the client will try to send a dm to someone with no username)
             //Checks to see whether user input is a normal message or a logout one.
-            if (message.toUpperCase().equals("/LOGOUT")) {
+            if (message.toUpperCase().equals("/LOGOUT")) { //Logs out user
                 client.sendMessage(new ChatMessage(message, 1, null));
                 return;
                 //Input and output cannot be closed from static context; I believe that the if statement in run handles it now.
-            } else if (message.toUpperCase().equals("/LIST")) {
+            } else if (message.toUpperCase().equals("/LIST")) { //Prints out list
                     //TODO: print out list
 
 
             } else if (message.length() > 4) { //avoiding exceptions (ex: sending the message "hi" should move on to the else statement)
-                if (message.substring(0, 4).toUpperCase().equals("/MSG")) {
+                if (message.substring(0, 4).toUpperCase().equals("/MSG")) { //Sends direct message
                     //remove "/msg " from message
                     message = message.substring(5, message.length());
 
@@ -140,8 +140,11 @@ final class ChatClient {
                         client.sendMessage(new ChatMessage(message, 2, username));
                     }
                 }
+                else { //Sends a general message of more than 4 letters
+                    client.sendMessage(new ChatMessage(message, 0, null));
+                }
             }
-            else {
+            else { //Sends a general message of less than or exactly 4 letters.
                 client.sendMessage(new ChatMessage(message, 0, null));
             }
 
