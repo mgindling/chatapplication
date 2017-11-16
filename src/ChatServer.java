@@ -120,7 +120,6 @@ final class ChatServer {
         }
 
         //Broadcast method. Sends message to all clients. I think it's concurrent; any client can access it.
-        //TODO: (really a question, but I wanted it highlighted in blue) Should this be edited so that if one person tries to send a message while broadcast() is still running, they will both work? i.e. multiple threads or something?
         private void broadcast(String message) {
             for (int c = 0; c < clients.size(); c++) {
                 if (!clients.get(c).writeMessage(message)) {
@@ -140,7 +139,6 @@ final class ChatServer {
                 socket.close();
                 sOutput.close();
                 sInput.close();
-                return;
             } catch (IOException e) {
                 e.printStackTrace();
             }

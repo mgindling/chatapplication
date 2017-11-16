@@ -145,7 +145,6 @@ final class ChatClient {
             //Reads user input and stores it in the variable message.
             message = input.nextLine();
 
-            //TODO: error checking (ex: "/msg " gives an error b/c the client will try to send a dm to someone with no username)
             //Checks to see whether user input is a normal message or a logout one.
             if (message.toUpperCase().equals("/LOGOUT")) { //Logs out user
                 client.sendMessage(new ChatMessage(message, 1, null));
@@ -220,7 +219,7 @@ final class ChatClient {
             //Allows client to persist. No kill switch besides force shutdown.
             while (true) {
                     try {
-                        String msg = "";
+                        String msg;
                         try {
                             msg = (String) sInput.readObject();
                         }catch (SocketException | ClassNotFoundException e) {
