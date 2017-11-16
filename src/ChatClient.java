@@ -115,7 +115,7 @@ final class ChatClient {
         System.out.println("Welcome to the CS18000 chat application!");
         System.out.println("To send a general message, simply type your message!");
         System.out.println("To list the clients currently on the server, type '/list'");
-        System.out.println("To send a private message, type '/msg' and then (?????)");
+        System.out.println("To send a private message, type '/msg' and then <the recipient> (in brackets) and then <your message> (also in brackets).");
         System.out.println("To logout, type '/logout'");
         System.out.println();
 
