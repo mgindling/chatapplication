@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ConnectException;
 import java.net.Socket;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.Scanner;
 
@@ -131,6 +132,16 @@ final class ChatClient {
             //     System.out.print("Chat: ");
             // }
 
+            //try {
+            //    Thread.sleep(1000);
+            //} catch (InterruptedException e) {
+            //    e.printStackTrace();
+            //}
+
+            if (client.socket == null) {
+                return;
+            }
+
             //Reads user input and stores it in the variable message.
             message = input.nextLine();
 
@@ -141,7 +152,6 @@ final class ChatClient {
                 return;
                 //Input and output cannot be closed from static context; I believe that the if statement in run handles it now.
             } else if (message.toUpperCase().equals("/LIST")) { //Prints out list
-                //TODO: print out list
                 client.sendMessage(new ChatMessage("This will be replaced by the list", 3, client.username));
             } else if (message.length() > 5 && message.substring(0, 5).toUpperCase().equals("/LIST") && !message.substring(5, message.length()).equals(" ")) {
                 client.sendMessage(new ChatMessage("Please type exactly /list when asking for a list", 2, client.username));
@@ -209,24 +219,31 @@ final class ChatClient {
 
             //Allows client to persist. No kill switch besides force shutdown.
             while (true) {
-                try {
-                    String msg = (String) sInput.readObject();
+                    try {
+                        String msg = "";
+                        try {
+                            msg = (String) sInput.readObject();
+                        }catch (SocketException | ClassNotFoundException e) {
+                            System.out.println("The server has closed!");
+                            socket = null;
+                            return;
+                        }
 
-                    //If the server sends a kill String (right now it's end), everything closes and the client ends. (Client actually ends in main.)
-                    if (msg.equals("end")) {
-                        sOutput.close();
-                        sInput.close();
-                        socket.close();
-                        return;
+                        //If the server sends a kill String (right now it's end), everything closes and the client ends. (Client actually ends in main.)
+                        if (msg.equals("end")) {
+                            sOutput.close();
+                            sInput.close();
+                            socket.close();
+                            return;
+                        } else {
+                            System.out.println(msg);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                    else {
-                        System.out.println(msg);
-                    }
-                } catch (IOException | ClassNotFoundException e) {
-                    e.printStackTrace();
                 }
             }
 
         }
     }
-}
+
