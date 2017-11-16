@@ -132,12 +132,12 @@ final class ChatClient {
             //     System.out.print("Chat: ");
             // }
 
+            //Reads user input and stores it in the variable message.
+            message = input.nextLine();
+
             if (client.socket == null) {
                 return;
             }
-
-            //Reads user input and stores it in the variable message.
-            message = input.nextLine();
 
             //Checks to see whether user input is a normal message or a logout one.
             if (message.toUpperCase().equals("/LOGOUT")) { //Logs out user
