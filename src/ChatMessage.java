@@ -1,3 +1,5 @@
+package src;
+
 import java.io.Serializable;
 
 final class ChatMessage implements Serializable {
@@ -6,7 +8,7 @@ final class ChatMessage implements Serializable {
     private int type;
     private String recipient;
 
-    //Constructor for ChatMessage
+    //Constructor for src.ChatMessage
     //msg is the message to be displayed; type is an integer representing what kind of message msg is. 0 = general message, 1 = logout message, 2 = direct message
     public ChatMessage(String msg, int type, String recipient) {
         this.msg = msg;

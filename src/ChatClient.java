@@ -1,3 +1,5 @@
+package src;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -76,7 +78,7 @@ final class ChatClient {
         return true;
     }
 
-    //This method is used to send a ChatMessage Objects to the server
+    //This method is used to send a src.ChatMessage Objects to the server
     private void sendMessage(ChatMessage msg) {
         try {
             sOutput.writeObject(msg);
@@ -145,13 +147,13 @@ final class ChatClient {
 
         } while (!message.equals("/LOGOUT"));
         //SAMPLE CODE: Sends an empty message to the server
-        //client.sendMessage(new ChatMessage());
+        //client.sendMessage(new src.ChatMessage());
     }
 
 
     /*
-     * This is a private class inside of the ChatClient
-     * It will be responsible for listening for messages from the ChatServer.
+     * This is a private class inside of the src.ChatClient
+     * It will be responsible for listening for messages from the src.ChatServer.
      * ie: When other clients send messages, the server will relay it to the client.
      */
     private final class ListenFromServer implements Runnable {

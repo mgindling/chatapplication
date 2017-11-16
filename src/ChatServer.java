@@ -1,11 +1,10 @@
-import com.sun.xml.internal.ws.policy.privateutil.PolicyUtils;
+package src;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +35,7 @@ final class ChatServer {
         this.filterFile = "badwords.txt";
     }
 
-    //This is what starts the ChatServer.
+    //This is what starts the src.ChatServer.
     //Right now it just creates the socketServer and adds a new ClientThread to a list to be handled
     private void start() {
         try {
@@ -64,7 +63,7 @@ final class ChatServer {
         server.start();
     }
 
-    //This is a private class inside of the ChatServer
+    //This is a private class inside of the src.ChatServer
     //A new thread will be created to run this every time a new client connects.
     private final class ClientThread implements Runnable {
         Socket socket;
