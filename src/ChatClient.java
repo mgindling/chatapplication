@@ -112,9 +112,9 @@ final class ChatClient {
 
         //Create your client and start it.
         ChatClient client;
-        ChatClient client2;
-        client = new ChatClient(args[2], Integer.parseInt(args[1]), args[0]);
-        client2 = new ChatClient();
+        client = new ChatClient();
+        //client = new ChatClient(args[2], Integer.parseInt(args[1]), args[0]);
+
 
         try {
             client.start();
