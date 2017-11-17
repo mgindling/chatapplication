@@ -213,7 +213,7 @@ final class ChatClient {
                         try {
                             msg = (String) sInput.readObject();
                         }catch (SocketException | ClassNotFoundException e) {
-                            System.out.println("The server has closed!");
+                            System.out.println("The server has closed! Enter any character to continue.");
                             socket = null;
                             return;
                         }
