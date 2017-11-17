@@ -231,6 +231,10 @@ final class ChatClient {
                             return;
                         }
 
+                        if (msg.contains("logged out")) {
+                            sOutput.writeObject("kill");
+                        }
+
                         //If the server sends a kill String (right now it's end), everything closes and the client ends. (Client actually ends in main.)
                         if (msg.equals("end")) {
                             sOutput.close();

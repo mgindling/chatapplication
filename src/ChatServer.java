@@ -224,14 +224,20 @@ final class ChatServer {
                     try {
                         //Program should use the arraylist to search for the client with the same ID and then send that to the method to be deleted.
                         //Not sure if that's what it's doing here.
+                        broadcast(username + " has logged out.");
                         remove(id);
-                        broadcast(username + "has logged out.");
 
                         /*try {
                             Thread.sleep(10000);
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }*/
+
+                        try {
+                            sInput.readObject();
+                        } catch (ClassNotFoundException e) {
+                            e.printStackTrace();
+                        }
 
                         sOutput.writeObject("end");
                         close();
