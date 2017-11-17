@@ -175,7 +175,7 @@ final class ChatServer {
         @Override
         public void run() {
 
-            //"Killed before you began--and you say I'm the evil one?"
+            //"Killed before you began--and you say I'm heartless?"
             if (username == null) {
                 remove(id);
                 close();
