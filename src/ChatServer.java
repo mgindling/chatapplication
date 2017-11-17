@@ -59,8 +59,19 @@ final class ChatServer {
 
     //Initializes port (set at 1500; port number can be removed and it will initialize the same) and goes to start().
     public static void main(String[] args) {
-        ChatServer server = new ChatServer(1500);
-        server.start();
+        ChatServer server;
+
+        switch (args.length) {
+            case 0: server = new ChatServer();
+                    break;
+            case 1: server = new ChatServer(Integer.parseInt(args[0]));
+                    break;
+            case 2: server = new ChatServer(Integer.parseInt(args[0]), args[1]);
+
+            ChatServer server = new ChatServer(1500);
+            server.start();
+        }
+
     }
 
     //This is a private class inside of the src.ChatServer

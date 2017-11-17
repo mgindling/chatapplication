@@ -112,9 +112,21 @@ final class ChatClient {
 
         //Create your client and start it.
         ChatClient client;
-        ChatClient client2;
-        client = new ChatClient(args[2], Integer.parseInt(args[1]), args[0]);
-        client2 = new ChatClient();
+
+        switch (args.length) {
+            case 0: client = new ChatClient();
+                    break;
+            case 1: client = new ChatClient(args[0]);
+                    break;
+            case 2: client = new ChatClient(Integer.parseInt(args[1]), args[0]);
+                    break;
+            case 3: client = new ChatClient(args[2], Integer.parseInt(args[1]), args[0]);
+                    break;
+            default: client = new ChatClient();
+                    client.sendMessage(new ChatMessage("Please specify at most 3 arguments", 3, "Anonymous"));
+                    client.sendMessage(new ChatMessage("/LOGOUT", 1, null));
+                    break;
+        }
 
         try {
             client.start();
@@ -140,7 +152,6 @@ final class ChatClient {
         do {
 
             //Makes it look nice ("if it doesn't look nice, it doesn't work.")
-            //It doesn't work right now. The code input.hasNextLine() works opposite (i.e. only displays "Chat: " when the server outputs something. This does nothing (???). Just having it print out "Chat:" prints it out every line.
             // if (!input.hasNextLine()) {
             //     System.out.print("Chat: ");
             // }
@@ -174,6 +185,7 @@ final class ChatClient {
                         username += message.charAt(counter++);
                     }
 
+                    username = username.toUpperCase();
                     message = message.substring(username.length(), message.length());
 
                     // Right now if they try to dm themselves, the person will "successfully" dm themselves but the message will be "you can't dm yourself".
