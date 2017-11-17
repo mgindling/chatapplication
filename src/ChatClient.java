@@ -26,7 +26,7 @@ final class ChatClient {
         if (username.contains(" ")) {
             username = username.replaceAll(" ", "");
         }
-        this.username = username;
+        this.username = username.toUpperCase();
     }
 
     //Written constructor for two parameters (port + username).
@@ -36,7 +36,7 @@ final class ChatClient {
         if (username.contains(" ")) {
             username = username.replaceAll(" ", "");
         }
-        this.username = username;
+        this.username = username.toUpperCase();
 
         this.server = "localhost"; //Default IP
     }
@@ -46,7 +46,7 @@ final class ChatClient {
         if (username.contains(" ")) {
             username = username.replaceAll(" ", "");
         }
-        this.username = username;
+        this.username = username.toUpperCase();
 
         this.server = "localhost"; //Default IP
         this.port = 1500; //Default port
@@ -56,7 +56,7 @@ final class ChatClient {
     private ChatClient() {
         this.server = "localhost";
         this.port = 1500;
-        this.username = "Anonymous";
+        this.username = "ANONYMOUS";
     }
 
     //Starts the chat client.
@@ -112,9 +112,19 @@ final class ChatClient {
 
         //Create your client and start it.
         ChatClient client;
-        client = new ChatClient();
-        //client = new ChatClient(args[2], Integer.parseInt(args[1]), args[0]);
 
+        switch (args.length) {
+            case 0: client = new ChatClient();
+                    break;
+            case 1: client = new ChatClient(args[0]);
+                    break;
+            case 2: client = new ChatClient(Integer.parseInt(args[1]), args[0]);
+                    break;
+            case 3: client = new ChatClient(args[2], Integer.parseInt(args[1]), args[0]);
+                    break;
+            default:client = new ChatClient(args[2], Integer.parseInt(args[1]), args[0]);
+                    break;
+        }
 
         try {
             client.start();
@@ -140,7 +150,6 @@ final class ChatClient {
         do {
 
             //Makes it look nice ("if it doesn't look nice, it doesn't work.")
-            //It doesn't work right now. The code input.hasNextLine() works opposite (i.e. only displays "Chat: " when the server outputs something. This does nothing (???). Just having it print out "Chat:" prints it out every line.
             // if (!input.hasNextLine()) {
             //     System.out.print("Chat: ");
             // }
@@ -170,16 +179,20 @@ final class ChatClient {
                     String username = "";
                     int counter = 0;
 
-                    while (!(Character.isWhitespace(message.charAt(counter)))) {
-                        username += message.charAt(counter++);
+                    try {
+                        while (!(Character.isWhitespace(message.charAt(counter))))  {
+                            username += message.charAt(counter++);
+                        }
+                    } catch (StringIndexOutOfBoundsException e) {
+                        client.sendMessage(new ChatMessage("ERROR", 2, client.username));
                     }
 
+                    username = username.toUpperCase();
                     message = message.substring(username.length(), message.length());
 
                     // Right now if they try to dm themselves, the person will "successfully" dm themselves but the message will be "you can't dm yourself".
-                    // I get the feeling Vocareum will see this as an error even though it would work fine for whoever is using the program.
                     if (username.equals(client.username)) {
-                        client.sendMessage(new ChatMessage("You can't direct message yourself.", 2, client.username)); //would this line cause an error? I don't think so
+                        client.sendMessage(new ChatMessage("You can't direct message yourself.", 2, client.username));
                     } else {
                         client.sendMessage(new ChatMessage(message, 2, username));
                     }
