@@ -63,13 +63,17 @@ final class ChatServer {
 
         switch (args.length) {
             case 0: server = new ChatServer();
+                    server.start();
                     break;
             case 1: server = new ChatServer(Integer.parseInt(args[0]));
+                    server.start();
                     break;
             case 2: server = new ChatServer(Integer.parseInt(args[0]), args[1]);
-
-            ChatServer server = new ChatServer(1500);
-            server.start();
+                    server.start();
+                    break;
+            default:server = new ChatServer(Integer.parseInt(args[0]), args[1]);
+                    server.start();
+                    break;
         }
 
     }
@@ -224,14 +228,22 @@ final class ChatServer {
 
                 Boolean variable = false;
                 if (cm.getType() == 2) {
-                    for (int i = 0; i < clients.size(); i++) {
-                        if (clients.get(i).username.equals(cm.getRecipient())) {
-                            directMessage(cm.getMsg(), cm.getRecipient());
-                            variable = true;
+                    if (cm.getMsg().toUpperCase().equals("ERROR")) {
+                        directMessage("Please add a message to your direct message", username);
+                    } else {
+                        if (cm.getRecipient().toUpperCase().equals(username)) {
+                            directMessage("You can't direct message yourself.", username);
+                        } else {
+                            for (int i = 0; i < clients.size(); i++) {
+                                if (clients.get(i).username.equals(cm.getRecipient())) {
+                                    directMessage(cm.getMsg(), cm.getRecipient());
+                                    variable = true;
+                                }
+                            }
+                            if (!variable) {
+                                directMessage("That person is not online or does not exist.", username);
+                            }
                         }
-                    }
-                    if (!variable) {
-                        directMessage("That person is not online or does not exist.", username);
                     }
                 }
 
