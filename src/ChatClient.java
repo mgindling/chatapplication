@@ -22,12 +22,20 @@ final class ChatClient {
     private ChatClient(String server, int port, String username) {
         this.server = server;
         this.port = port;
+
+        if (username.contains(" ")) {
+            username = username.replaceAll(" ", "");
+        }
         this.username = username;
     }
 
     //Written constructor for two parameters (port + username).
     private ChatClient(int port, String username) {
         this.port = port;
+
+        if (username.contains(" ")) {
+            username = username.replaceAll(" ", "");
+        }
         this.username = username;
 
         this.server = "localhost"; //Default IP
@@ -35,6 +43,9 @@ final class ChatClient {
 
     //Written constructor for one parameter (username).
     private ChatClient(String username) {
+        if (username.contains(" ")) {
+            username = username.replaceAll(" ", "");
+        }
         this.username = username;
 
         this.server = "localhost"; //Default IP
@@ -117,7 +128,7 @@ final class ChatClient {
         System.out.println("Welcome to the CS18000 chat application!");
         System.out.println("To send a general message, simply type your message!");
         System.out.println("To list the clients currently on the server, type '/list'");
-        System.out.println("To send a private message, type '/msg' and then <the recipient> (in brackets) and then <your message> (also in brackets).");
+        System.out.println("To send a private message, type '/msg username message'");
         System.out.println("To logout, type '/logout'");
         System.out.println();
 
@@ -155,39 +166,22 @@ final class ChatClient {
                     //remove "/msg " from message
                     message = message.substring(5, message.length());
 
-                    if (!(message.substring(0, 1).equals("<") && message.contains(">"))) {
-                        client.sendMessage(new ChatMessage("Please specify the username between < and >", 2, client.username));
+                    //get username (recipient of dm)
+                    String username = "";
+                    int counter = 0;
+
+                    while (!(Character.isWhitespace(message.charAt(counter)))) {
+                        username += message.charAt(counter++);
+                    }
+
+                    message = message.substring(username.length(), message.length());
+
+                    // Right now if they try to dm themselves, the person will "successfully" dm themselves but the message will be "you can't dm yourself".
+                    // I get the feeling Vocareum will see this as an error even though it would work fine for whoever is using the program.
+                    if (username.equals(client.username)) {
+                        client.sendMessage(new ChatMessage("You can't direct message yourself.", 2, client.username)); //would this line cause an error? I don't think so
                     } else {
-
-                        //get username (recipient of dm)
-                        String username = "";
-                        int counter = 1;
-                        if (message.substring(0, 1).equals("<")) {
-                            while (!(message.charAt(counter) == '>')) {
-                                username += message.charAt(counter++);
-                            }
-
-                            // Right now if they try to dm themselves, the person will "successfully" dm themselves but the message will be "you can't dm yourself".
-                            // I get the feeling Vocareum will see this as an error even though it would work fine for whoever is using the program.
-                            if (username.equals(client.username)) {
-                                client.sendMessage(new ChatMessage("You can't direct message yourself.", 2, client.username)); //would this line cause an error? I don't think so
-                            } else {
-                                //get message
-                                int counter2 = 1;
-                                message = message.substring(username.length() + 3, message.length());
-                                if (!(message.substring(0, 1).equals("<") && message.contains(">"))) {
-                                    client.sendMessage(new ChatMessage("Please specify the message between the second < and >", 2, client.username));
-                                } else {
-                                    //gets length of message
-                                    while (!(message.charAt(counter2) == '>')) {
-                                        counter2++;
-                                    }
-
-                                    message = message.substring(1, message.length() - 1);
-                                    client.sendMessage(new ChatMessage(message, 2, username));
-                                }
-                            }
-                        }
+                        client.sendMessage(new ChatMessage(message, 2, username));
                     }
                 }
                 else { //Sends a general message of more than 4 letters
