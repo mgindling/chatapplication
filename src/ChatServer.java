@@ -5,6 +5,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -194,8 +195,13 @@ final class ChatServer {
 
                 //Calls the broadcast method, which makes all clients receive the same message.
                 //Should NOT cause every client on the server to logoff in the case of a logout message.
-                if (cm.getType() == 0) {
-                    broadcast(username + ": " + cm.getMsg());
+                try {
+                    if (cm.getType() == 0) {
+                        broadcast(username + ": " + cm.getMsg());
+                    }
+                } catch (NullPointerException e) {
+                    System.out.println("Client " + username + " has dropped.");
+                    return;
                 }
 
                 //If the message is a logout message the server sends a message to the client THAT CALLED IT telling it to close.
